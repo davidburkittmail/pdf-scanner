@@ -1,23 +1,29 @@
-# import packages
-import PyPDF2
-import re
-import sys
+import PyPDF2, re, sys, urllib.request, pathlib.Path  
 
-pdf = sys.argv[1]
-term = sys.argv[2]
-print("Scanning "+pdf+" for "+term)
+def search_pdf(pdf,term):
+    print("Scanning "+pdf+" for "+term)
+    reader = PyPDF2.PdfReader(pdf)
+    num_pages = len(reader.pages)
+    match = False
+    for page in reader.pages:
+        text = page.extract_text()
+        res_search = re.search(term, text)
+        if res_search != None:
+            match = True
+    return match
 
-# open the pdf file
-reader = PyPDF2.PdfReader(pdf)
+def download_pdf(pdfUrl):
+    fileName = Path(pdfUrl).name
+    print("Downloading "+pdfUrl+" to "+fileName)
+    urllib.request.urlretrieve(pdfUrl, fileName)
+    return fileName
 
-# get number of pages
-num_pages = len(reader.pages)
+def main():
+    pdfUrl = sys.argv[1]
+    searchTerm = sys.argv[2]
+    pdfFile = download_pdf(pdfUrl)
+    if scan_pdf(pdfFile,searchTerm):
+        print("Match - " pdf_url)
 
-# extract text and do the search
-for page in reader.pages:
-    text = page.extract_text()
-    # print(text)
-    res_search = re.search(term, text)
-    #print(res_search)
-    if res_search != None:
-        print("Match")
+if __name__ == "__main__":
+    main()
