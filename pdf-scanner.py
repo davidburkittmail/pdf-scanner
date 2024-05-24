@@ -1,4 +1,4 @@
-import PyPDF2, re, sys, urllib.request, pathlib.Path  
+import PyPDF2, re, sys, urllib.request, os
 
 def search_pdf(pdf,term):
     print("Scanning "+pdf+" for "+term)
@@ -13,8 +13,8 @@ def search_pdf(pdf,term):
     return match
 
 def download_pdf(pdfUrl):
-    fileName = Path(pdfUrl).name
-    print("Downloading "+pdfUrl+" to "+fileName)
+    uri, fileName = os.path.split(pdfUrl)
+    print("Downloading from "+uri+" to "+fileName)
     urllib.request.urlretrieve(pdfUrl, fileName)
     return fileName
 
@@ -22,8 +22,9 @@ def main():
     pdfUrl = sys.argv[1]
     searchTerm = sys.argv[2]
     pdfFile = download_pdf(pdfUrl)
-    if scan_pdf(pdfFile,searchTerm):
-        print("Match - "+pdf_url)
+    if search_pdf(pdfFile,searchTerm):
+        print("Match - "+pdfFile)
+    os.remove(pdfFile)
 
 if __name__ == "__main__":
     main()
