@@ -23,7 +23,7 @@ def main():
     searchTerm = sys.argv[2]
     pdfFile = download_pdf(pdfUrl)
     if scan_pdf(pdfFile,searchTerm):
-        print("Match - " pdf_url)
+        print("Match - "+pdf_url)
 
 if __name__ == "__main__":
     main()
